@@ -1,0 +1,7 @@
+from fastapi import FastAPI
+
+testapp = FastAPI()
+
+@testapp.get("/")
+async def root():
+    return {"message":"Wassup world"}
