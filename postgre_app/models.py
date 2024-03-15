@@ -51,6 +51,7 @@ class Patient(Base):
 
     user = relationship("User", back_populates="patient")
     patient_race = relationship("PatientRace", back_populates="patient")
+    emergency_contact = relationship("EmergencyContact", back_populates="emergency_contact")
 
 class PhysicianAssignedPatient(Base):
     __tablename__ = "physician_assigned_patients"
@@ -77,3 +78,16 @@ class PatientRace(Base):
     patient_race = Column(String, nullable=False)
 
     patient = relationship("Patient", back_populates="patient_race")
+
+class EmergencyContact(Base):
+    __tablename__ = "emergency_contacts"
+
+    emergency_contact_id = Column(Integer, primary_key=True)
+    patient_user_id = Column(Integer, ForeignKey("patients.patient_user_id"), nullable=False)
+    emergency_contact_given_name = Column(String, nullable=False)
+    emergency_contact_middle_initial = Column(String)
+    emergency_contact_last_name = Column(String, nullable=False)
+    emergency_contact_phone_number = Column(String, nullable=False)
+    emergency_contact_email = Column(String)
+
+    patient = relationship("Patient", back_populates="emergency_contact")
