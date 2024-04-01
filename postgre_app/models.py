@@ -11,7 +11,7 @@ class Admission(Base):
     date_of_admission = Column(datetime, nullable=False)
     admissions_description = Column(String, nullable=False)
 
-    medical_record = relationship("MedicalRecord", back_populates="admission")
+    medical_record = relationship("MedicalRecord", back_populates="admissions")
 
 class Allergy(Base):
     __tablename__ = "allergies"
@@ -22,7 +22,7 @@ class Allergy(Base):
     allergy_severity = Column(String(75))
     additional_information = Column(String)
 
-    medical_record = relationship("MedicalRecord", back_populates="allergy")
+    medical_record = relationship("MedicalRecord", back_populates="allergies")
 
 class Appointment(Base):
     __tablename__ = "appointments"
@@ -33,7 +33,7 @@ class Appointment(Base):
     appointment_date = Column(datetime, nullable=False)
     appointment_description = Column(String, nullable=False)
 
-    medical_record = relationship("MedicalRecord", back_populates="appointment")
+    medical_record = relationship("MedicalRecord", back_populates="appointments")
 
 class Assessment(Base):
     __tablename__ = "assessments"
@@ -43,8 +43,8 @@ class Assessment(Base):
     medical_record_id = Column(BigInteger, ForeignKey("medical_records.medical_record_id"), nullable=False)
     assessments_summation = Column(String, nullable=False)
 
-    chief_complaint = relationship("ChiefComplaint", back_populates="assessment")
-    medical_record = relationship("MedicalRecord", back_populates="assessment")
+    chief_complaint = relationship("ChiefComplaint", back_populates="assessments")
+    medical_record = relationship("MedicalRecord", back_populates="assessments")
 
 class BloodRelative(Base):
     __tablename__ = "blood_relatives"
@@ -62,7 +62,7 @@ class BloodRelative(Base):
     mother_cause_of_death = Column(String)
     father_cause_of_death = Column(String)
 
-    medical_record = relationship("MedicalRecord", back_populates="blood_relative")
+    medical_record = relationship("MedicalRecord", back_populates="blood_relatives")
 
 class ChiefComplaint(Base):
     __tablename__ = "chief_complaints"
@@ -72,16 +72,17 @@ class ChiefComplaint(Base):
     chief_complaint_statement = Column(String, nullable=False)
     chief_complaint_date = Column(datetime, nullable=False)
 
-    medication = relationship("Medication", back_populates="chief_complaint")
-    surgical_related_problem = relationship("SurgicalRelatedProblem", back_populates="chief_complaint")
-    vital = relationship("Vital", back_populates="chief_complaint")
-    treatment = relationship("Treatment", back_populates="chief_complaint")
+    medications = relationship("Medication", back_populates="chief_complaint")
+    surgical_related_problems = relationship("SurgicalRelatedProblem", back_populates="chief_complaint")
+    vitals = relationship("Vital", back_populates="chief_complaint")
+    treatments = relationship("Treatment", back_populates="chief_complaint")
     review_of_systems = relationship("ReviewOfSystems", back_populates="chief_complaint")
-    physical_exam = relationship("PhysicalExam", back_populates="chief_complaint")
-    assessment = relationship("Assessment", back_populates="chief_complaint")
-    plan = relationship("Plan", back_populates="chief_complaint")
-    history_present_illness = relationship("HistoryPresentIllness", back_populates="chief_complaint")
-    diagnosis = relationship("Diagnosis", back_populates="chief_complaint")
+    physical_exams = relationship("PhysicalExam", back_populates="chief_complaint")
+    assessments = relationship("Assessment", back_populates="chief_complaint")
+    plans = relationship("Plan", back_populates="chief_complaint")
+    histories_present_illness = relationship("HistoryPresentIllness", back_populates="chief_complaint")
+    diagnoses = relationship("Diagnosis", back_populates="chief_complaint")
+    medical_record = relationship("MedicalRecord", back_populates="chief_complaints") # One to many relationship with chief complaints.
 
 class Diagnosis(Base):
     __tablename__ = "diagnoses"
@@ -92,8 +93,8 @@ class Diagnosis(Base):
     diagnosis_date = Column(datetime, nullable=False)
     diagnosis_description = Column(String, nullable=False)
 
-    chief_complaint = relationship("ChiefComplaint", back_populates="diagnosis")
-    medical_record = relationship("MedicalRecord", back_populates="diagnosis")
+    chief_complaint = relationship("ChiefComplaint", back_populates="diagnoses")
+    medical_record = relationship("MedicalRecord", back_populates="diagnoses")
 
 class EmergencyContact(Base):
     __tablename__ = "emergency_contacts"
@@ -106,7 +107,7 @@ class EmergencyContact(Base):
     emergency_contact_phone_number = Column(String(15), nullable=False)
     emergency_contact_email = Column(String(254))
 
-    patient = relationship("Patient", back_populates="emergency_contact")
+    patient = relationship("Patient", back_populates="emergency_contacts")
 
 class FamilyIllness(Base):
     __tablename__ = "family_illnesses"
@@ -122,7 +123,7 @@ class FamilyIllness(Base):
     daughters = Column(Boolean)
     grandparents = Column(Boolean)
 
-    medical_record = relationship("MedicalRecord", back_populates="family_illness")
+    medical_record = relationship("MedicalRecord", back_populates="family_illnesses")
 
 class HistoryPresentIllness(Base):
     __tablename__ = "histories_present_illness"
@@ -140,8 +141,8 @@ class HistoryPresentIllness(Base):
     hpi_severity = Column(String)
     hpi_description = Column(String)
 
-    chief_complaint = relationship("ChiefComplaint", back_populates="history_present_illness")
-    medical_record = relationship("MedicalRecord", back_populates="history_present_illness")
+    chief_complaint = relationship("ChiefComplaint", back_populates="histories_present_illness")
+    medical_record = relationship("MedicalRecord", back_populates="histories_present_illness")
 
 class Illness(Base):
     __tablename__ = "illnesses"
@@ -156,8 +157,8 @@ class Illness(Base):
     illnesses_surgical_related_problem_id = Column(BigInteger)
     illnesses_allergy_id = Column(BigInteger)
 
-    chief_complaint = relationship("ChiefComplaint", back_populates="illness")
-    medical_record = relationship("MedicalRecord", back_populates="illness")
+    chief_complaint = relationship("ChiefComplaint", back_populates="illnesses")
+    medical_record = relationship("MedicalRecord", back_populates="illnesses")
 
 class Immunization(Base):
     __tablename__ = "immunizations"
@@ -166,7 +167,7 @@ class Immunization(Base):
     medical_record_id = Column(BigInteger, ForeignKey("medical_records.medical_record_id"), nullable=False)
     immunization = Column(String(85), nullable=False)
 
-    medical_record = relationship("MedicalRecord", back_populates="immunization")
+    medical_record = relationship("MedicalRecord", back_populates="immunizations")
 
 class MedicalRecord(Base):
     __tablename__ = "medical_records"
@@ -179,25 +180,26 @@ class MedicalRecord(Base):
     blood_transfusion_status = Column(String, nullable=False)
 
     user = relationship("User", back_populates="medical_record")
-    nurse_note = relationship("NurseNote", back_populates="medical_record")
+    nurse_notes = relationship("NurseNote", back_populates="medical_record")
     social_history = relationship("SocialHistory", back_populates="medical_record")
-    appointment = relationship("Appointment", back_populates="medical_record")
-    family_illness = relationship("FamilyIllness", back_populates="medical_record")
-    medication = relationship("Medication", back_populates="medical_record")
-    blood_relative = relationship("BloodRelative", back_populates="medical_record")
-    visit = relationship("Visit", back_populates="medical_record")
-    allergy = relationship("Allergy", back_populates="medical_record")
-    immunization = relationship("Immunization", back_populates="medical_record")
-    surgical_related_problem = relationship("SurgicalRelatedProblem", back_populates="medical_record")
-    admission = relationship("Admission", back_populates="medical_record")
-    vital = relationship("Vital", back_populates="medical_record")
-    treatment = relationship("Treatment", back_populates="medical_record")
-    review_of_systems = relationship("ReviewOfSystems", back_populates="medical_record")
-    physical_exam = relationship("PhysicalExam", back_populates="medical_record")
-    assessment = relationship("Assessment", back_populates="medical_record")
-    plan = relationship("Plan", back_populates="medical_record")
-    history_present_illness = relationship("HistoryPresentIllness", back_populates="medical_record")
-    diagnosis = relationship("Diagnosis", back_populates="medical_record")
+    appointments = relationship("Appointment", back_populates="medical_record")
+    family_illnesses = relationship("FamilyIllness", back_populates="medical_record")
+    medications = relationship("Medication", back_populates="medical_record")
+    blood_relatives = relationship("BloodRelative", back_populates="medical_record")
+    visits = relationship("Visit", back_populates="medical_record")
+    allergies = relationship("Allergy", back_populates="medical_record")
+    immunizations = relationship("Immunization", back_populates="medical_record")
+    surgical_related_problems = relationship("SurgicalRelatedProblem", back_populates="medical_record")
+    admissions = relationship("Admission", back_populates="medical_record")
+    vitals = relationship("Vital", back_populates="medical_record")
+    treatments = relationship("Treatment", back_populates="medical_record")
+    reviews_of_systems = relationship("ReviewOfSystems", back_populates="medical_record")
+    physical_exams = relationship("PhysicalExam", back_populates="medical_record")
+    assessments = relationship("Assessment", back_populates="medical_record")
+    plans = relationship("Plan", back_populates="medical_record")
+    histories_present_illness = relationship("HistoryPresentIllness", back_populates="medical_record")
+    diagnoses = relationship("Diagnosis", back_populates="medical_record")
+    chief_complaints = relationship("ChiefComplaint", back_populates="medical_record")
 
 class Medication(Base):
     __tablename__ = "medications"
@@ -214,8 +216,8 @@ class Medication(Base):
     medication_end_date = Column(datetime)
     medication_healthcare_provider = Column(String(105))
 
-    chief_complaint = relationship("ChiefComplaint", back_populates="medication")
-    medical_record = relationship("MedicalRecord", back_populates="medication")
+    chief_complaint = relationship("ChiefComplaint", back_populates="medications")
+    medical_record = relationship("MedicalRecord", back_populates="medications")
 
 class Nonpatient(Base):
     __tablename__ = "nonpatients"
@@ -227,7 +229,7 @@ class Nonpatient(Base):
     nonpatient_staff_position_id = Column(String(75))
     nonpatient_specialty_id = Column(String(75))
 
-    user = relationship("User", back_populates="nonpatient")
+    user = relationship("User", back_populates="nonpatients")
 
 class NurseNote(Base):
     __tablename__ = "nurse_notes"
@@ -238,7 +240,7 @@ class NurseNote(Base):
     nurse_note_focus = Column(String, nullable=False)
     nurse_note_text = Column(String, nullable=False)
 
-    medical_record = relationship("MedicalRecord", back_populates="nurse_note")
+    medical_record = relationship("MedicalRecord", back_populates="nurse_notes")
 
 class Patient(Base):
     __tablename__ = "patients"
@@ -264,7 +266,7 @@ class Patient(Base):
 
     user = relationship("User", back_populates="patient")
     patient_race = relationship("PatientRace", back_populates="patient")
-    emergency_contact = relationship("EmergencyContact", back_populates="emergency_contact")
+    emergency_contacts = relationship("EmergencyContact", back_populates="patient")
 
 class PatientRace(Base):
     __tablename__ = "patient_races"
@@ -289,8 +291,8 @@ class PhysicalExam(Base):
     physical_exam_neurological = Column(String)
     physical_exam_date = Column(datetime, nullable=False)
 
-    chief_complaint = relationship("ChiefComplaint", back_populates="physical_exam")
-    medical_record = relationship("MedicalRecord", back_populates="physical_exam")
+    chief_complaint = relationship("ChiefComplaint", back_populates="physical_exams")
+    medical_record = relationship("MedicalRecord", back_populates="physical_exams")
 
 class PhysicianAssignedPatient(Base):
     __tablename__ = "physician_assigned_patients"
@@ -298,7 +300,7 @@ class PhysicianAssignedPatient(Base):
     staff_user_id = Column(BigInteger, ForeignKey("users.user_id"), nullable=False)
     patient_user_id = Column(BigInteger, nullable=False)
 
-    user = relationship("User", back_populates="physician_assigned_patient")
+    user = relationship("User", back_populates="physician_assigned_patients")
 
 class Plan(Base):
     __tablename__ = "plans"
@@ -308,8 +310,8 @@ class Plan(Base):
     medical_record_id = Column(BigInteger, ForeignKey("medical_records.medical_record_id"), nullable=False)
     plans_summation = Column(String)
 
-    chief_complaint = relationship("ChiefComplaint", back_populates="plan")
-    medical_record = relationship("MedicalRecord", back_populates="plan")
+    chief_complaint = relationship("ChiefComplaint", back_populates="plans")
+    medical_record = relationship("MedicalRecord", back_populates="plans")
 
 class ReviewOfSystems(Base):
     __tablename__ = "review_of_systems"
@@ -333,8 +335,8 @@ class ReviewOfSystems(Base):
     review_of_systems_allergic_immunologic = Column(String)
     review_of_systems_date = Column(datetime)
 
-    chief_complaint = relationship("ChiefComplaint", back_populates="review_of_systems")
-    medical_record = relationship("MedicalRecord", back_populates="review_of_systems")
+    chief_complaint = relationship("ChiefComplaint", back_populates="reviews_of_systems")
+    medical_record = relationship("MedicalRecord", back_populates="reviews_of_systems")
 
 class SocialHistory(Base):
     __tablename__ = "social_histories"
@@ -363,8 +365,8 @@ class SurgicalRelatedProblem(Base):
     surgicalsurgical_related_problem_procedure = Column(String(225))
     surgical_related_problem_procedure_year = Column(date)
 
-    chief_complaint = relationship("ChiefComplaint", back_populates="surgical_related_problem")
-    medical_record = relationship("MedicalRecord", back_populates="surgical_related_problem")
+    chief_complaint = relationship("ChiefComplaint", back_populates="surgical_related_problems")
+    medical_record = relationship("MedicalRecord", back_populates="surgical_related_problems")
 
 class Treatment(Base):
     __tablename__ = "treatments"
@@ -386,8 +388,8 @@ class Treatment(Base):
     treatment_date_created = Column(datetime, nullable=False)
     treatment_date_updated = Column(datetime)
 
-    chief_complaint = relationship("ChiefComplaint", back_populates="treatment")
-    medical_record = relationship("MedicalRecord", back_populates="treatment")
+    chief_complaint = relationship("ChiefComplaint", back_populates="treatments")
+    medical_record = relationship("MedicalRecord", back_populates="treatments")
 
 class User(Base):
     __tablename__ = "users"
@@ -398,11 +400,11 @@ class User(Base):
     user_middle_initial = Column(String(1))
     user_last_name = Column(String(50), nullable=False)
     user_date_of_birth = Column(date, nullable=False)
-    user_email = Column(String(254), unique=True)
+    email = Column(String(254), unique=True)
     user_date_created = Column(datetime, nullable=False)
     facility_id = Column(String(75), nullable=False)
-    user_enabled = Column(Boolean, nullable=False)
-    user_hashed_password = Column(String(68), nullable=False)
+    is_active = Column(Boolean, nullable=False)
+    hashed_password = Column(String(68), nullable=False)
     user_street_address = Column(String(100))
     user_city = Column(String(45))
     user_state = Column(String(50))
@@ -410,10 +412,10 @@ class User(Base):
     user_phone_number = Column(String(15))
 
     patient = relationship("Patient", back_populates="user")
-    physician_assigned_patient = relationship("PhysicianAssignedPatient", back_populates="user")
-    user_authorized_facility = relationship("UserAuthorizedFacility", back_populates="user")
-    user_login_log = relationship("UserLoginLog", back_populates="user")
-    user_activity_log = relationship("UserActivityLog", back_populates="user")
+    physician_assigned_patients = relationship("PhysicianAssignedPatient", back_populates="user")
+    user_authorized_facilities = relationship("UserAuthorizedFacility", back_populates="user")
+    user_login_logs = relationship("UserLoginLog", back_populates="user")
+    user_activity_logs = relationship("UserActivityLog", back_populates="user")
     nonpatient = relationship("Nonpatient", back_populates="user")
     medical_record = relationship("MedicalRecord", back_populates="user")
 
@@ -421,11 +423,11 @@ class UserActivityLog(Base):
     __tablename__ = "user_activity_logs"
 
     user_activity_log_id = Column(BigInteger, primary_key=True, nullable=False)
-    user_id = Column(BigInteger, nullable=False)
+    user_id = Column(BigInteger, ForeignKey("users.user_id"), nullable=False)
     user_date_time_of_activity = Column(datetime, nullable=False)
     activity_description = Column(String, nullable=False)
 
-    user = relationship("User", back_populates="user_activity_log")
+    user = relationship("User", back_populates="user_activity_logs")
 
 class UserAuthorizedFacility(Base):
     __tablename__ = "user_authorized_facilities"
@@ -434,7 +436,7 @@ class UserAuthorizedFacility(Base):
     user_id = Column(BigInteger, ForeignKey("users.user_id"), nullable=False)
     facility_id = Column(String(75), nullable=False)
 
-    user = relationship("User", back_populates="user_authorized_facility")
+    user = relationship("User", back_populates="user_authorized_facilities")
 
 class UserLoginLog(Base):
     __tablename__ = "user_login_logs"
@@ -444,18 +446,18 @@ class UserLoginLog(Base):
     user_date_time_of_activity = Column(datetime, nullable=False) 
     activity_description = Column(String, nullable=False)
 
-    user = relationship("User", back_populates="user_login_log")
+    user = relationship("User", back_populates="user_login_logs")
 
 class Visit(Base):
     __tablename__ = "visits"
 
     visit_id = Column(BigInteger, primary_key=True, nullable=False)
-    medical_record_id = Column(BigInteger, nullable=False)
+    medical_record_id = Column(BigInteger, ForeignKey("medical_records.medical_record_id"), nullable=False)
     visits_title = Column(String(75), nullable=False)
     visits_date = Column(datetime, nullable=False)
     visits_description = Column(String, nullable=False)
 
-    medical_record = relationship("MedicalRecord", back_populates="visit")
+    medical_record = relationship("MedicalRecord", back_populates="visits")
 
 class Vital(Base):
     __tablename__ = "vitals"
@@ -474,5 +476,5 @@ class Vital(Base):
     vitals_blood_pressure_diastolic = Column(Double)
     vitals_arterial_blood_oxygen_saturation = Column(Double)
 
-    chief_complaint = relationship("ChiefComplaint", back_populates="vital")
-    medical_record = relationship("MedicalRecord", back_populates="vital")
+    chief_complaint = relationship("ChiefComplaint", back_populates="vitals")
+    medical_record = relationship("MedicalRecord", back_populates="vitals")
