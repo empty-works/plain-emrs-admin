@@ -362,7 +362,7 @@ class SurgicalRelatedProblem(Base):
     medical_record_id = Column(BigInteger, ForeignKey("medical_records.medical_record_id"), nullable=False)
     surgical_related_problem = Column(String(105), nullable=False)
     surgical_related_problem_area = Column(String(75), nullable=False)
-    surgicalsurgical_related_problem_procedure = Column(String(225))
+    surgical_related_problem_procedure = Column(String(225))
     surgical_related_problem_procedure_year = Column(date)
 
     chief_complaint = relationship("ChiefComplaint", back_populates="surgical_related_problems")
