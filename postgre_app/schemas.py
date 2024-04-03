@@ -311,9 +311,94 @@ class SurgicalRelatedProblem(SurgicalRelatedProblemBase):
     chief_complaint_id: int
     medical_record_id: int
 
-# Treatment
-    
-############################################################
+class TreatmentBase(BaseModel):
+    treatment_healthcare_provider: Union[str, None] = None
+    treatment_type: str
+    treatment_description: Union[str, None] = None
+    treatment_notes: Union[str, None] = None
+    treatment_outcome: Union[str, None] = None
+    treatment_duration: int
+    treatment_frequency: Union[str, None] = None
+    treatment_location: Union[str, None] = None
+    treatment_cost: Union[float, None] = None
+    treatment_insurance_coverage: Union[str, None] = None
+    treatment_follow_up_plan: Union[str, None] = None
+    treatment_date_created: datetime
+    treatment_date_updated: Union[datetime, None] = None
+
+class TreatmentCreate(TreatmentBase):
+    chief_complaint_id: int
+    medical_record_id: int
+
+class Treatment(TreatmentBase):
+    treatment_id: int
+    chief_complaint_id: int
+    medical_record_id: int
+
+class UserActivityLogBase(BaseModel):
+    user_date_time_of_activity: datetime
+    activity_description: str
+
+class UserActivityLogCreate(UserActivityLogBase):
+    user_id: int
+
+class UserActivityLog(UserActivityLogBase):
+    user_activity_log_id: int
+    user_id: int
+
+class UserAuthorizedFacilityBase(BaseModel):
+    facility_id: str
+
+class UserAuthorizedFacilityCreate(UserAuthorizedFacilityBase):
+    user_id: int
+
+class UserAuthorizedFacility(UserAuthorizedFacilityBase):
+    user_authorized_facility_id: int
+    user_id: int
+
+class UserLoginLogBase(BaseModel):
+    user_date_time_of_activity: datetime
+    activity_description: str
+
+class UserLoginLogCreate(UserLoginLogBase):
+    user_id: int
+
+class UserLoginLog(UserLoginLogBase):
+    user_login_log_id: int
+    user_id: int
+
+class VisitBase(BaseModel):
+    visits_title: str
+    visits_date: datetime
+    visits_description: str
+
+class VisitCreate(VisitBase):
+    medical_record_id: int
+
+class Visit(VisitBase):
+    visit_id: int
+    medical_record_id: int
+
+class VitalBase(BaseModel):
+    vitals_date_taken: Union[datetime, None] = None
+    vitals_height: Union[float, None] = None
+    vitals_weight: Union[float, None] = None
+    vitals_calculated_bmi: Union[float, None] = None
+    vitals_temperature: Union[float, None] = None
+    vitals_pulse: Union[float, None] = None
+    vitals_respiratory_rate: Union[float, None] = None
+    vitals_blood_pressure_systolic: Union[float, None] = None
+    vitals_blood_pressure_diastolic: Union[float, None] = None
+    vitals_arterial_blood_oxygen_saturation: Union[float, None] = None
+
+class VitalCreate(VitalBase):
+    chief_complaint_id: int
+    medical_record_id: int
+
+class Vital(VitalBase):
+    vitals_id: int
+    chief_complaint_id: int
+    medical_record_id: int
 
 class ChiefComplaintBase(BaseModel):
     chief_complaint_statement: str
