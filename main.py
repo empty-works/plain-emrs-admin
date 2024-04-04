@@ -5,6 +5,12 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
+from postgre_app import crud, models, schemas
+from postgre_app.database import SessionLocal, engine
+
+models.Base.metadata.create_all(bind=engine)
 
 # To get a string like this in Windows run:
 # .\generate_random_hex.ps1
