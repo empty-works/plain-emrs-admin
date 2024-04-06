@@ -221,7 +221,7 @@ class Medication(Base):
 class Nonpatient(Base):
     __tablename__ = "nonpatients"
 
-    user_id = Column(BigInteger, ForeignKey("users.user_id"), nullable=False)
+    user_id = Column(BigInteger, ForeignKey("users.user_id"), primary_key=True, nullable=False)
     nonpatient_organization = Column(String(100), nullable=False)
     nonpatient_description = Column(String)
     nonpatient_ward_id = Column(String(75))
@@ -244,7 +244,7 @@ class NurseNote(Base):
 class Patient(Base):
     __tablename__ = "patients"
 
-    user_id = Column(BigInteger, ForeignKey("users.user_id"), nullable=False)
+    user_id = Column(BigInteger, ForeignKey("users.user_id"), primary_key=True, nullable=False)
     patient_provider = Column(String(100), nullable=False)
     patient_provider_id = Column(String(60), nullable=False)
     patient_room = Column(String(10))
@@ -296,7 +296,7 @@ class PhysicalExam(Base):
 class PhysicianAssignedPatient(Base):
     __tablename__ = "physician_assigned_patients"
 
-    staff_user_id = Column(BigInteger, ForeignKey("users.user_id"), nullable=False)
+    staff_user_id = Column(BigInteger, ForeignKey("users.user_id"), primary_key=True, nullable=False)
     patient_user_id = Column(BigInteger, nullable=False)
 
     user = relationship("User", back_populates="physician_assigned_patients")

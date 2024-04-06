@@ -16,7 +16,7 @@ class Admission(AdmissionBase):
 class AllergyBase(BaseModel):
     allergy_name: str
     allergy_severity: Union[str, None] = None
-    additional_information = Union[str, None] = None
+    additional_information: Union[str, None] = None
 
 class AllergyCreate(AllergyBase):
     medical_record_id: int
@@ -184,7 +184,7 @@ class NonpatientBase(BaseModel):
     nonpatient_description: Union[str, None] = None
     nonpatient_ward_id: Union[str, None] = None
     nonpatient_staff_position_id: Union[str, None] = None
-    nonpatient_specialty_id = Union[str, None] = None
+    nonpatient_specialty_id: Union[str, None] = None
 
 class NonpatientCreate(NonpatientBase):
     user_id: int
