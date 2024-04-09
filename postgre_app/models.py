@@ -71,6 +71,7 @@ class ChiefComplaint(Base):
     chief_complaint_statement = Column(String, nullable=False)
     chief_complaint_date = Column(DateTime, nullable=False)
 
+    illnesses = relationship("Illness", back_populates="chief_complaint")
     medications = relationship("Medication", back_populates="chief_complaint")
     surgical_related_problems = relationship("SurgicalRelatedProblem", back_populates="chief_complaint")
     vitals = relationship("Vital", back_populates="chief_complaint")
