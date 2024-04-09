@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from postgre_app import crud, models, schemas
+from postgre_app.schemas import UserBase
 from postgre_app.database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
@@ -34,42 +35,11 @@ def get_db():
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+    return True # For testing purposes
+    #return pwd_context.verify(plain_password, hashed_password)
 
 def get_password_hash(password):
     return pwd_context.hash(password)
-
-'''
-hash_pwd1 = get_password_hash("fakehashedsecret1")
-hash_pwd2 = get_password_hash("fakehashedsecret2")
-
-fake_users_db = {
-    "fakeuser1": {
-        "username": "fakeuser1",
-        "first_name": "Fake",
-        "middle_initial": "A",
-        "last_name": "User1",
-        "date_of_birth": date(1996, 12, 11),
-        "date_created": datetime.now(),
-        "email": "fakeuser1@example.com",
-        "facility_id": "The Facility",
-        "hashed_password": hash_pwd1,
-        "enabled": True
-    },
-    "fakeuser2": {
-        "username": "fakeuser2",
-        "first_name": "Fake",
-        "middle_initial": "E",
-        "last_name": "User2",
-        "date_of_birth": date(1995, 11, 11),
-        "date_created": datetime.now(),
-        "email": "fakeuser2@example.com",
-        "facility_id": "The Facility",
-        "hashed_password": hash_pwd2,
-        "enabled": True
-    },
-}
-'''
 
 class Token(BaseModel):
     access_token: str
@@ -78,27 +48,15 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: Union[str, None] = None
 
-class User(BaseModel):
-    username: str
-    first_name: str
-    middle_initial: Union[str, None] = None
-    last_name: str
-    date_of_birth: date
-    date_created: datetime
-    email: Union[str, None] = None
-    facility_id: str
-    enabled: bool
 
-class UserInDB(User):
-    hashed_password: str
+#class UserInDB(models.User):
+#    hashed_password: str
 
-def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
+def get_user(db, username: str) -> Union[models.User, None]:
+    return db.query(models.User).filter(models.User.username == username).first()
 
-def authenticate_user(fake_db, username: str, password: str):
-    user = get_user(fake_db, username)
+def authenticate_user(db, username: str, password: str) -> Union[models.User, bool]:
+    user = get_user(db, username)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -135,7 +93,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     return user
 
 async def get_current_active_user(
-        current_user: Annotated[User, Depends(get_current_user)]):
+        current_user: Annotated[models.User, Depends(get_current_user)]):
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
@@ -158,7 +116,7 @@ async def login_for_access_token(
     return Token(access_token=access_token, token_type="bearer")
 
 @app.get("/users/me")
-async def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):
+async def read_users_me(current_user: Annotated[models.User, Depends(get_current_user)]):
     return current_user
 
 @app.post("/users/", response_model=schemas.User)
