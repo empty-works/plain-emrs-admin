@@ -76,7 +76,7 @@ class ChiefComplaint(Base):
     surgical_related_problems = relationship("SurgicalRelatedProblem", back_populates="chief_complaint")
     vitals = relationship("Vital", back_populates="chief_complaint")
     treatments = relationship("Treatment", back_populates="chief_complaint")
-    review_of_systems = relationship("ReviewOfSystems", back_populates="chief_complaint")
+    reviews_of_systems = relationship("ReviewOfSystems", back_populates="chief_complaint")
     physical_exams = relationship("PhysicalExam", back_populates="chief_complaint")
     assessments = relationship("Assessment", back_populates="chief_complaint")
     plans = relationship("Plan", back_populates="chief_complaint")
@@ -180,6 +180,7 @@ class MedicalRecord(Base):
     blood_transfusion_status = Column(String, nullable=False)
 
     user = relationship("User", back_populates="medical_record")
+    illnesses = relationship("Illness", back_populates="medical_record")
     nurse_notes = relationship("NurseNote", back_populates="medical_record")
     social_history = relationship("SocialHistory", back_populates="medical_record")
     appointments = relationship("Appointment", back_populates="medical_record")
@@ -416,7 +417,7 @@ class User(Base):
     user_authorized_facilities = relationship("UserAuthorizedFacility", back_populates="user")
     user_login_logs = relationship("UserLoginLog", back_populates="user")
     user_activity_logs = relationship("UserActivityLog", back_populates="user")
-    nonpatient = relationship("Nonpatient", back_populates="user")
+    nonpatients = relationship("Nonpatient", back_populates="user")
     medical_record = relationship("MedicalRecord", back_populates="user")
 
 class UserActivityLog(Base):

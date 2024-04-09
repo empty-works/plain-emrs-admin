@@ -52,10 +52,10 @@ class TokenData(BaseModel):
 #class UserInDB(models.User):
 #    hashed_password: str
 
-def get_user(db, username: str) -> Union[models.User, None]:
+def get_user(db: Session, username: str) -> Union[models.User, None]:
     return db.query(models.User).filter(models.User.username == username).first()
 
-def authenticate_user(db, username: str, password: str) -> Union[models.User, bool]:
+def authenticate_user(db: Session, username: str, password: str) -> Union[models.User, bool]:
     user = get_user(db, username)
     if not user:
         return False
@@ -87,7 +87,8 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = get_user(get_db, username=token_data.username)
+    db = next(get_db())
+    user = get_user(db, username=token_data.username)
     if user is None:
         raise credentials_exception
     return user
@@ -102,7 +103,8 @@ async def get_current_active_user(
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
     ) -> Token:
-    user = authenticate_user(get_db, form_data.username, form_data.password)
+    db = next(get_db())
+    user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
