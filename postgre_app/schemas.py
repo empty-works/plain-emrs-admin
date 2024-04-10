@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, List
 from pydantic import BaseModel
 from datetime import date, datetime
 
@@ -500,7 +500,7 @@ class UserBase(BaseModel):
     user_street_address: Union[str, None] = None
     user_city: Union[str, None] = None
     user_country: Union[str, None] = None
-    user_phone_number: Union[str, None] = None
+    user_phone_number: Union[List[str], None] = None
 
 class UserCreate(UserBase):
     hashed_password: str
@@ -510,13 +510,13 @@ class User(UserBase):
     user_date_created: datetime
     is_active: bool
 
-    patient: Patient
+    #patient: Patient
     physician_assigned_patients: list[PhysicianAssignedPatient] = []
     user_authorized_facilities: list[UserAuthorizedFacility] = []
     user_login_logs: list[UserLoginLog] = []
     user_activity_logs: list[UserActivityLog] = []
-    nonpatient: Nonpatient
-    medical_record: MedicalRecord
+    #nonpatient: Nonpatient
+    #medical_record: MedicalRecord
 
     class Config:
         orm_mode = True
