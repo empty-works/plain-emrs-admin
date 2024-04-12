@@ -48,10 +48,6 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: Union[str, None] = None
 
-
-#class UserInDB(models.User):
-#    hashed_password: str
-
 def get_user(db: Session, username: str) -> Union[models.User, None]:
     return db.query(models.User).filter(models.User.username == username).first()
 

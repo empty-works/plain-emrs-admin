@@ -499,6 +499,7 @@ class UserBase(BaseModel):
     facility_id: str
     user_street_address: Union[str, None] = None
     user_city: Union[str, None] = None
+    user_state: Union[str, None] = None
     user_country: Union[str, None] = None
     user_phone_number: Union[List[str], None] = None
 
