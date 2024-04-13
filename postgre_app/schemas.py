@@ -511,13 +511,10 @@ class User(UserBase):
     user_date_created: datetime
     is_active: bool
 
-    #patient: Patient
     physician_assigned_patients: list[PhysicianAssignedPatient] = []
     user_authorized_facilities: list[UserAuthorizedFacility] = []
     user_login_logs: list[UserLoginLog] = []
     user_activity_logs: list[UserActivityLog] = []
-    #nonpatient: Nonpatient
-    #medical_record: MedicalRecord
 
     class Config:
         orm_mode = True
