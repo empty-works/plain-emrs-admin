@@ -49,13 +49,15 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 def hash_password(password):
     pwd_bytes = password.encode('utf-8')
     salt = bcrypt.gensalt()
-    hash_password = bcrypt.hashpw(password=pwd_bytes, salt=salt)
-    return hash_password
+    hashed_password = bcrypt.hashpw(password=pwd_bytes, salt=salt)
+    string_password = hashed_password.decode('utf-8')
+    return string_password
 
 # Check if the provided password matches the stored password (hashed)
 def verify_password(plain_password, hashed_password):
     password_byte_enc = plain_password.encode('utf-8')
-    return bcrypt.checkpw(password = password_byte_enc, hashed_password = hashed_password)
+    hashed_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(password_byte_enc, hashed_password)
 
 def authenticate_user(db: Session, username: str, password: str) -> Union[models.User, bool]:
     user = get_user_by_username(db, username)
